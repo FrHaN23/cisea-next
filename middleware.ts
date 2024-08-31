@@ -22,11 +22,7 @@ export default withAuth(
     callbacks:{
         authorized({ req,token }) {
           const url = req.nextUrl.pathname
-
-          if(req.nextUrl.pathname.startsWith("/request") || req.nextUrl.pathname.startsWith("/feedback")){
-            return true
-          }
-
+          
           if (url.startsWith("/")) {
             if (token?.expires as number < Math.floor(Date.now()/1000)){
               return false
