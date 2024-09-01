@@ -14,6 +14,7 @@ import { Edit } from '@mui/icons-material';
 import ModalLayout from '@/app/(Dashboard)/components/shared/Modal';
 import FormMasterDistrict from './formUser';
 import FormUser from './formUser';
+import { getUsers } from '@/apis/user/api';
 
 
 type Props = {
@@ -42,7 +43,7 @@ export default function DataTables({search}:Props){
         onSearch(search as string)
     }, [search])
 
-    const {data, error, isLoading, total} = getDistricts(paginationModel)
+    const {data, error, isLoading, total} = getUsers(paginationModel)
     return (
         <>
         <Paper sx={{marginTop:"10px", zIndex:1, flexWrap: "warp"}} >
@@ -127,8 +128,11 @@ const columns: GridColDef[] = [
     {field: 'id', headerName: '', align:"center", sortable:false, headerAlign:"center", disableColumnMenu:true, width:170, headerClassName: "header",
     renderCell: ((params:any) => <ActionButton id={params.value} isFinished={params.row.is_finished}/>)},
     {field: 'username', headerName: 'Username', headerAlign:"left", width:400, headerClassName: "header"},
-    {field: 'name', headerName: 'Nama', headerAlign:"left", width:400, headerClassName: "header"},
-    {field: 'role', headerName: 'Role', headerAlign:"left", width:400, headerClassName: "header"},
-    {field: 'district', headerName: 'Wilayah', headerAlign:"left", width:400, headerClassName: "header"},
+    {field: 'nama', headerName: 'Nama', headerAlign:"left", width:400, headerClassName: "header"},
+    {field: 'role', headerName: 'Role', headerAlign:"left", width:200, headerClassName: "header",
+        renderCell: ((params: any) => params.value === 1 ? "Admin" : "User")
+    },
+    {field: 'district', headerName: 'Wilayah', headerAlign:"left", width:400, headerClassName: "header",
+        renderCell: ((params: any) => params.value && params.value.name)
+    },
 ]
-

@@ -4,8 +4,8 @@ import { useState } from "react"
 import AddIcon from '@mui/icons-material/Add';
 import FormMasterDistrict from "./components/formUser"
 import DataTables from "./components/Datatables";
-import ModalLayout from "../components/shared/Modal";
-import PageContainer from "../components/container/PageContainer";
+import ModalLayout from "../../components/shared/Modal";
+import PageContainer from "../../components/container/PageContainer";
 
 export default function CataloguePage(){
     const [Search, setSearch] = useState("")
@@ -28,7 +28,7 @@ export default function CataloguePage(){
                 <DataTables search={Search}/>
             </div>
         </PageContainer>
-        <ModalLayout header='Add New District' isOpen={AddModal} onClose={()=>setAddModal(false)}>
+        <ModalLayout header='Add New User' isOpen={AddModal} onClose={()=>setAddModal(false)}>
             <FormMasterDistrict onClose={()=>setAddModal(false)} />
         </ModalLayout>
         </>

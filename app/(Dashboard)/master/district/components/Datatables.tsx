@@ -42,6 +42,7 @@ export default function DataTables({search}:Props){
     }, [search])
 
     const {data, error, isLoading, total} = getDistricts(paginationModel)
+    console.log(data)
     return (
         <>
         <Paper sx={{marginTop:"10px", zIndex:1, flexWrap: "warp"}} >

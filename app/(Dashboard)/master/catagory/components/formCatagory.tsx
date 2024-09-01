@@ -99,74 +99,78 @@ export default function FormMasterCatagory({id, onClose, isChildren}:Props){
                     name="name"
                     autoFocus
                 />
-                <Stack direction='row' flex={1} gap={2}>
-                    <FormControl fullWidth 
-                        variant="outlined" 
-                        margin="normal">
-                        <InputLabel>
-                            Alokasi Kota/Kab
-                        </InputLabel>
-                        <OutlinedInput
-                            type={'text'}
-                            defaultValue={data && data.provinsi}
-                            value={alokasi.kota}
-                            onChange={(e)=>handleAlokasi(e)}
-                            required
-                            fullWidth
-                            label="Alokasi Kota/Kab"
-                            name="kota"
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    %
-                                </InputAdornment>
-                            }
-                        />
-                    </FormControl>
-                    <FormControl fullWidth 
-                        variant="outlined" 
-                        margin="normal">
-                        <InputLabel>
-                            Alokasi Provinsi
-                        </InputLabel>
-                        <OutlinedInput
-                            defaultValue={data && data.provinsi}
-                            value={alokasi.provinsi}
-                            onChange={(e)=>handleAlokasi(e)}
-                            required
-                            id="Prov"
-                            type="text"
-                            label="Alokasi Provinsi"
-                            name="provinsi"
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    %
-                                </InputAdornment>
-                            }
-                        />
-                    </FormControl>
-                    <FormControl fullWidth 
-                        variant="outlined" 
-                        margin="normal">
-                        <InputLabel>
-                            Alokasi Pusat
-                        </InputLabel>
-                        <OutlinedInput
-                            defaultValue={data && data.pusat}
-                            value={alokasi.pusat}
-                            onChange={(e)=>handleAlokasi(e)}
-                            required
-                            id="Pusat"
-                            type="text"
-                            label="Alokasi Pusat"
-                            name="pusat"
-                            endAdornment={
-                                <InputAdornment position="end">
-                                    %
-                                </InputAdornment>
-                            }
-                        />
-                    </FormControl>
-                </Stack>
+                {
+                    isChildren &&
+                    <Stack direction='row' flex={1} gap={2}>
+                        <FormControl fullWidth 
+                            variant="outlined" 
+                            margin="normal">
+                            <InputLabel>
+                                Alokasi Kota/Kab
+                            </InputLabel>
+                            <OutlinedInput
+                                type={'text'}
+                                defaultValue={data && data.provinsi}
+                                value={alokasi.kota}
+                                onChange={(e)=>handleAlokasi(e)}
+                                required
+                                fullWidth
+                                label="Alokasi Kota/Kab"
+                                name="kota"
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        %
+                                    </InputAdornment>
+                                }
+                            />
+                        </FormControl>
+                        <FormControl fullWidth 
+                            variant="outlined" 
+                            margin="normal">
+                            <InputLabel>
+                                Alokasi Provinsi
+                            </InputLabel>
+                            <OutlinedInput
+                                defaultValue={data && data.provinsi}
+                                value={alokasi.provinsi}
+                                onChange={(e)=>handleAlokasi(e)}
+                                required
+                                id="Prov"
+                                type="text"
+                                label="Alokasi Provinsi"
+                                name="provinsi"
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        %
+                                    </InputAdornment>
+                                }
+                            />
+                        </FormControl>
+                        <FormControl fullWidth 
+                            variant="outlined" 
+                            margin="normal">
+                            <InputLabel>
+                                Alokasi Pusat
+                            </InputLabel>
+                            <OutlinedInput
+                                defaultValue={data && data.pusat}
+                                value={alokasi.pusat}
+                                onChange={(e)=>handleAlokasi(e)}
+                                required
+                                id="Pusat"
+                                type="text"
+                                label="Alokasi Pusat"
+                                name="pusat"
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        %
+                                    </InputAdornment>
+                                }
+                            />
+                        </FormControl>
+                    </Stack>
+
+                }
                 <Button
                     color="primary"
                     type="submit"

@@ -29,7 +29,7 @@ export default function CataloguePage(){
             </div>
         </PageContainer>
         <ModalLayout header='Add New Catagory' isOpen={AddModal} onClose={()=>setAddModal(false)}>
-            <FormMasterCatagory onClose={()=>setAddModal(false)} />
+            <FormMasterCatagory onClose={()=>setAddModal(false)}/>
         </ModalLayout>
         </>
     )
