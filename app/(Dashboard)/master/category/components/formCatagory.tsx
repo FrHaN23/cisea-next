@@ -39,7 +39,6 @@ export default function FormMasterCatagory({id, onClose, isChildren}:Props){
     };
 
     const {data, error, isLoading} = getCategoryById(id as string, isChildren as boolean)
-    
     const handlePost = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         setIsLoding(true)
@@ -89,7 +88,7 @@ export default function FormMasterCatagory({id, onClose, isChildren}:Props){
         <>
             <Box component={'form'} onSubmit={handlePost}>
                 <TextField
-                    defaultValue={data && data.nama}
+                    defaultValue={data && data.name}
                     margin="normal"
                     required
                     fullWidth

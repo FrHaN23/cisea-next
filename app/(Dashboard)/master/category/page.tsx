@@ -2,10 +2,10 @@
 import { Grid, Button, TextField } from "@mui/material"
 import { useState } from "react"
 import ModalLayout from "../../components/shared/Modal"
-import DataTables from "../catagory/components/Datatables"
+import DataTables from "./components/Datatables"
 import AddIcon from '@mui/icons-material/Add';
 import PageContainer from "../../components/container/PageContainer"
-import FormMasterCatagory from "../catagory/components/formCatagory"
+import FormMasterCatagory from "./components/formCatagory"
 
 export default function CataloguePage(){
     const [Search, setSearch] = useState("")

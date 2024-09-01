@@ -19,9 +19,9 @@ function Menuitems(){
     },
     {
       id: uniqueId(),
-      title: "Catagory",
+      title: "Category",
       icon: IconClipboardData,
-      href: "/master/catagory",
+      href: "/master/category",
     },
     {
       id: uniqueId(),

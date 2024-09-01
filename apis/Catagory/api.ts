@@ -56,7 +56,7 @@ export async function createCategory(body: any, token?: string){
     const queryParams = new URLSearchParams({
         name: ''
     })
-    const res = await fetch(baseUrl + `/catalogue`,
+    const res = await fetch(baseUrl + `/category`,
         {
             method: "POST",
             body: JSON.stringify(body),
@@ -82,7 +82,7 @@ export async function createCategoryChild(body: any, token?: string){
     const queryParams = new URLSearchParams({
         name: ''
     })
-    const res = await fetch(baseUrl + `/catalogue`,
+    const res = await fetch(baseUrl + `/category`,
         {
             method: "POST",
             body: JSON.stringify(body),
@@ -93,7 +93,7 @@ export async function createCategoryChild(body: any, token?: string){
         }
     )
     if(res.ok){
-        mutate(baseUrl + `/category/${body.parrent_id}/details?offset=${pagination.page}&limit=${pagination.pageSize}&`+ queryParams)
+        mutate(baseUrl + `/category/${body.parent_id}/details?offset=${pagination.page}&limit=${pagination.pageSize}&`+ queryParams)
     }
     return res
 }
@@ -101,7 +101,7 @@ export async function createCategoryChild(body: any, token?: string){
 export async function updateCategory(body: any, token?: string){
     const auth = await Auther()
     
-    const res = await fetch(baseUrl + `/catalogue`,
+    const res = await fetch(baseUrl + `/category`,
         {
             method: "PUT",
             body: JSON.stringify(body),
