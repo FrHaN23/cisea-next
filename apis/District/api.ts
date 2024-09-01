@@ -3,7 +3,7 @@ import { Auther, baseUrl, fetcher, fetcherToken, Pagination } from "@/const/cons
 import useSWR, { mutate } from "swr"
 
 
-export function getDistrictById(layanan_id: string, isChildren: boolean,){
+export function getDistrictById(id: string, isChildren: boolean,){
     if(isChildren){
         return {
             data: null,
@@ -12,7 +12,7 @@ export function getDistrictById(layanan_id: string, isChildren: boolean,){
         }
     }
     const { data, error, isLoading} = useSWR(
-        [baseUrl + `/district/${layanan_id}`],
+        [baseUrl + `/district/${id}`],
         ([url]) => fetcherToken(url))
     return {
         data: data?.data,
@@ -100,8 +100,14 @@ export async function createDistrictChild(body: any){
 
 export async function updateDistrict(body: any){
     const auth = await Auther()
-    
-    const res = await fetch(baseUrl + `/district`,
+    const paginate: Pagination = {
+        page: 0,
+        pageSize: 25
+    }
+    const queryParams = new URLSearchParams({
+        name: "",
+    })
+    const res = await fetch(baseUrl + `/district/${body.id}`,
         {
             method: "PUT",
             body: JSON.stringify(body),
@@ -112,7 +118,7 @@ export async function updateDistrict(body: any){
         }
     )
     if(res.ok){
-        mutate([baseUrl + `/district/${body.id}`])
+        mutate(baseUrl + `/district?offeset=${paginate.page}&limit=${paginate.pageSize}&`+ queryParams)
     }
     return res
 }

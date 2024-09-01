@@ -3,15 +3,46 @@ import {
   IconClipboardData,
   IconLayoutDashboard,
   IconListCheck,
-  IconMessageReport,
+  IconBuilding,
   IconUser,
 } from "@tabler/icons-react";
 
 import { uniqueId } from "lodash";
+import { useSession } from "next-auth/react";
 
 function Menuitems(){
-
-  
+  const {data:session, status} = useSession()
+  const masters = [
+    {
+      navlabel: true,
+      subheader: "Masters",
+    },
+    {
+      id: uniqueId(),
+      title: "Catagory",
+      icon: IconClipboardData,
+      href: "/master/catagory",
+    },
+    {
+      id: uniqueId(),
+      title: "District",
+      icon: IconBuilding,
+      href: "/master/district",
+    },
+    {
+      navlabel: true,
+      subheader: "settings",
+    },
+    {
+      id: uniqueId(),
+      title: "Users",
+      icon: IconUser,
+      href: "/settings/users",
+    },
+  ]
+  if (status === "loading" || status === 'unauthenticated'){
+    return []
+  }
   return [
     {
       navlabel: true,
@@ -34,33 +65,11 @@ function Menuitems(){
       icon: IconArticle,
       href: "/penerimaan",
     },
-    {
-      navlabel: true,
-      subheader: "Masters",
-    },
-    {
-      id: uniqueId(),
-      title: "Catagory",
-      icon: IconClipboardData,
-      href: "/master/catagory",
-    },
-    {
-      id: uniqueId(),
-      title: "Users",
-      icon: IconUser,
-      href: "/settings/district",
-    },
-  
-    {
-      navlabel: true,
-      subheader: "settings",
-    },
-    {
-      id: uniqueId(),
-      title: "Users",
-      icon: IconUser,
-      href: "/settings/users",
-    },
+    
+    ...(session?.user.role === 1 ?
+      masters : []
+    ),
+    
   ];
 }
 

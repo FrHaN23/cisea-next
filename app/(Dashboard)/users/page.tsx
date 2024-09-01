@@ -1,18 +1,18 @@
 'use client'
 import { Grid, Button, TextField } from "@mui/material"
 import { useState } from "react"
-import ModalLayout from "../../components/shared/Modal"
 import AddIcon from '@mui/icons-material/Add';
-import PageContainer from "../../components/container/PageContainer"
-import FormMasterDistrict from "./components/formDistrict"
+import FormMasterDistrict from "./components/formUser"
 import DataTables from "./components/Datatables";
+import ModalLayout from "../components/shared/Modal";
+import PageContainer from "../components/container/PageContainer";
 
 export default function CataloguePage(){
     const [Search, setSearch] = useState("")
     const [AddModal, setAddModal] = useState(false)    
     return (
         <>
-        <PageContainer title="Wilayah" description="Master Form" >
+        <PageContainer title="User" description="User" >
             <Grid
                 container
                 direction="row"

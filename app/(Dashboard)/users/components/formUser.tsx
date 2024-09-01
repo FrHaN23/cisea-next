@@ -2,7 +2,7 @@
 import { createDistrict, getDistrictById, updateDistrict } from "@/apis/District/api";
 import BackdropLoading from "@/app/(Dashboard)/components/loading/BackdropLoadng";
 import Snackbar from "@/app/(Dashboard)/utilities/Snackbar/Snakbar";
-import {Box, Button, LinearProgress, OutlinedInput, Stack, TextField } from "@mui/material";
+import {Box, Button, LinearProgress, TextField } from "@mui/material";
 import { useState } from "react";
 
 type Props = {
@@ -11,7 +11,7 @@ type Props = {
     isChildren?: boolean
 }
 
-export default function FormMasterDistrict({id, onClose, isChildren}:Props){
+export default function FormUser({id, onClose, isChildren}:Props){
     const [IsLoding, setIsLoding] = useState(false)
 
     const {data, error, isLoading} = getDistrictById(id as string, isChildren as boolean)
@@ -23,7 +23,7 @@ export default function FormMasterDistrict({id, onClose, isChildren}:Props){
         const data = new FormData(event.currentTarget)
         data.forEach((value,key)=>body[key]=value)
         if(id){
-            body['id'] = id.toString()
+            body['id'] = id
             const res = await updateDistrict(body)
             if (res.ok){
                 onClose()

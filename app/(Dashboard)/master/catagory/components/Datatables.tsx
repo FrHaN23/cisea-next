@@ -119,6 +119,6 @@ function ActionButton({id}:any){
 const columns: GridColDef[] = [
     {field: 'id', headerName: '', align:"center", sortable:false, headerAlign:"center", disableColumnMenu:true, width:170, headerClassName: "header",
     renderCell: ((params:any) => <ActionButton id={params.value} isFinished={params.row.is_finished}/>)},
-    {field: 'name', headerName: 'Nama Kategori', headerAlign:"left", width:400, headerClassName: "header"},
+    {field: 'name', headerName: 'Nama District', headerAlign:"left", width:500, headerClassName: "header"},
 ]
 

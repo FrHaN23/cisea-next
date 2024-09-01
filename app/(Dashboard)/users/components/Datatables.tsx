@@ -12,7 +12,8 @@ import Snackbar from '@/app/(Dashboard)/utilities/Snackbar/Snakbar';
 import { getDistricts } from '@/apis/District/api';
 import { Edit } from '@mui/icons-material';
 import ModalLayout from '@/app/(Dashboard)/components/shared/Modal';
-import FormMasterDistrict from './formDistrict';
+import FormMasterDistrict from './formUser';
+import FormUser from './formUser';
 
 
 type Props = {
@@ -114,8 +115,8 @@ function ActionButton({id}:any){
             onClose={()=>setDialogDelete(false)}
             open={DialogDelete}/>
         <BackdropLoading isLoading={IsLoading}/>
-        <ModalLayout header='Edit District' isOpen={editModal} onClose={()=>setEditModal(false)}>
-            <FormMasterDistrict onClose={()=>setEditModal(false)} id={id}/>
+        <ModalLayout header='Edit User' isOpen={editModal} onClose={()=>setEditModal(false)}>
+            <FormUser onClose={()=>setEditModal(false)} id={id}/>
         </ModalLayout>
         </>
     )
@@ -125,6 +126,9 @@ function ActionButton({id}:any){
 const columns: GridColDef[] = [
     {field: 'id', headerName: '', align:"center", sortable:false, headerAlign:"center", disableColumnMenu:true, width:170, headerClassName: "header",
     renderCell: ((params:any) => <ActionButton id={params.value} isFinished={params.row.is_finished}/>)},
-    {field: 'name', headerName: 'Nama Wilayah', headerAlign:"left", width:400, headerClassName: "header"},
+    {field: 'username', headerName: 'Username', headerAlign:"left", width:400, headerClassName: "header"},
+    {field: 'name', headerName: 'Nama', headerAlign:"left", width:400, headerClassName: "header"},
+    {field: 'role', headerName: 'Role', headerAlign:"left", width:400, headerClassName: "header"},
+    {field: 'district', headerName: 'Wilayah', headerAlign:"left", width:400, headerClassName: "header"},
 ]
 

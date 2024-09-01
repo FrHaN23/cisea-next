@@ -12,7 +12,7 @@ export function getCategoryById(layanan_id: string, isChildren: boolean,token?: 
         }
     }
     const { data, error, isLoading} = useSWR(
-        [baseUrl + `/catalogue/${layanan_id}`],
+        [baseUrl + `/category/${layanan_id}`],
         ([url]) => fetcherToken(url))
     return {
         data: data?.data,
@@ -31,7 +31,7 @@ export async function deleteCategoryById(layanan_id: string, token?: string){
     const queryParams = new URLSearchParams({
         name: ''
     })
-    const res = await fetch(baseUrl + `/catalogue/${layanan_id}`,
+    const res = await fetch(baseUrl + `/category/${layanan_id}`,
         {
             method: "DELETE",
             headers: {
@@ -41,7 +41,7 @@ export async function deleteCategoryById(layanan_id: string, token?: string){
         }
     )
     if(res.ok){
-        mutate(baseUrl + `/catalogue?offeset=${paginate.page}&limit=${paginate.pageSize}&`+ queryParams)
+        mutate(baseUrl + `/category?offeset=${paginate.page}&limit=${paginate.pageSize}&`+ queryParams)
     }
     return res
 }
@@ -67,7 +67,7 @@ export async function createCategory(body: any, token?: string){
         }
     )
     if(res.ok){
-        mutate(baseUrl + `/catalogue?offeset=${paginate.page}&limit=${paginate.pageSize}&`+ queryParams)
+        mutate(baseUrl + `/category?offeset=${paginate.page}&limit=${paginate.pageSize}&`+ queryParams)
     }
     return res
 }
@@ -93,7 +93,7 @@ export async function createCategoryChild(body: any, token?: string){
         }
     )
     if(res.ok){
-        mutate(baseUrl + `/catalogue/${body.parrent_id}/details?offset=${pagination.page}&limit=${pagination.pageSize}&`+ queryParams)
+        mutate(baseUrl + `/category/${body.parrent_id}/details?offset=${pagination.page}&limit=${pagination.pageSize}&`+ queryParams)
     }
     return res
 }
@@ -112,7 +112,7 @@ export async function updateCategory(body: any, token?: string){
         }
     )
     if(res.ok){
-        mutate([baseUrl + `/catalogue/${body.id}`])
+        mutate([baseUrl + `/category/${body.id}`])
     }
     return res
 }
@@ -123,7 +123,7 @@ export function getCategories(paginate: Pagination, token?: string){
     })
 
     const { data, error, isLoading} = useSWR(
-        baseUrl + `/catalogue?offeset=${paginate.page}&limit=${paginate.pageSize}&`+ queryParams,
+        baseUrl + `/category?offeset=${paginate.page}&limit=${paginate.pageSize}&`+ queryParams,
         (url) => fetcherToken(url))
     const total = data ? data.count : 0
     return {
@@ -139,7 +139,7 @@ export function getCatagoryWithChild(id:string, paginate: Pagination, token?: st
         name: "",
     })
     const { data, error, isLoading} = useSWR(
-        baseUrl + `/catalogue/${id}/details?offeset=${paginate.page}&limit=${paginate.pageSize}&`+ queryParams,
+        baseUrl + `/category/${id}/details?offeset=${paginate.page}&limit=${paginate.pageSize}&`+ queryParams,
         (url) => fetcherToken(url))
     const total = data ? data.count : 0
     return {
@@ -153,7 +153,7 @@ export function getCatagoryWithChild(id:string, paginate: Pagination, token?: st
 
 export function getCategoryList(token?: string){
     const { data, error, isLoading} = useSWR(
-        baseUrl + `/catalogue/list`,
+        baseUrl + `/category/list`,
         (url) => fetcherToken(url))
     return {
         data: data?.data,
