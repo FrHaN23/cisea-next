@@ -45,7 +45,6 @@ export default function DataTables({search}:Props){
     }, [search])
 
     const {data, error, isLoading, total} = getPenerimaans(paginationModel)
-    console.log(data)
     return (
         <>
         <Paper sx={{marginTop:"10px", zIndex:1, flexWrap: "warp"}} >
@@ -118,7 +117,7 @@ function ActionButton({id}:any){
             onClose={()=>setDialogDelete(false)}
             open={DialogDelete}/>
         <BackdropLoading isLoading={IsLoading}/>
-        <ModalLayout header='Edit User' isOpen={editModal} onClose={()=>setEditModal(false)}>
+        <ModalLayout header='Edit Penerimaan' isOpen={editModal} onClose={()=>setEditModal(false)}>
             <FormUser onClose={()=>setEditModal(false)} id={id}/>
         </ModalLayout>
         </>

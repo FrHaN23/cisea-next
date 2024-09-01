@@ -56,7 +56,6 @@ export default function FormPenerimaan({id, onClose}:Props){
     const [category_id, setCategory_id] = useState(0)
 
     const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) =>{
-        console.log(e)
         setValue(e.target.value)
     }
     const handleChangeDistrict = (event: any) => {
@@ -77,7 +76,9 @@ export default function FormPenerimaan({id, onClose}:Props){
     useEffect(() => {
         if(data && !isLoading){
             !value && setValue(data.value)
-            district === 0 && setDistrict(data.district.id)
+            district === 0 && setDistrict(data.district_id)
+            ct_parent === 0 && setCt_parent(data.category.parent_id)
+            category_id === 0 && setCategory_id(data.category.id)
         }
     }, [data, isLoading])
     
@@ -175,7 +176,7 @@ export default function FormPenerimaan({id, onClose}:Props){
                         <Select
                             labelId="role-type-label"
                             id="use-select"
-                            defaultValue={data && data.district_id}
+                            defaultValue={data && data.category.parent_id}
                             onChange={(e)=>handleChangeCategoryParent(e)}
                             label="Category"
                         >
@@ -196,7 +197,7 @@ export default function FormPenerimaan({id, onClose}:Props){
                             <Select
                                 labelId="role-type-label"
                                 id="use-select"
-                                defaultValue={data && data.district_id}
+                                defaultValue={data && data.category.id}
                                 onChange={(e)=>handleChangeCategoryValue(e)}
                                 label="Category value"
                             >
