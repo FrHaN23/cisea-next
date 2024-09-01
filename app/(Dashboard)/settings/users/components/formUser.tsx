@@ -4,7 +4,7 @@ import { createUser, getUserById, updateUser } from "@/apis/user/api";
 import BackdropLoading from "@/app/(Dashboard)/components/loading/BackdropLoadng";
 import Snackbar from "@/app/(Dashboard)/utilities/Snackbar/Snakbar";
 import {Box, Button, FormControl, InputLabel, LinearProgress, MenuItem, Select, TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
     id?: string
@@ -32,6 +32,13 @@ export default function FormUser({id, onClose, isChildren}:Props){
 
     const {data, error, isLoading} = getUserById(id as string)
     const districtList = getDistrictList()
+
+    useEffect(() => {
+        if(data && !isLoading){
+            district === 0 && setDistrict(data.district_id)
+            role === 0 && setRole(data.role)
+        }
+    }, [data, isLoading])
     
     const handlePost = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
@@ -42,6 +49,7 @@ export default function FormUser({id, onClose, isChildren}:Props){
         body["district_id"] = district
         body["role"] = role
         if(id){
+            body['id'] = id
             const res = await updateUser(body)
             if (res.ok){
                 onClose()
@@ -90,9 +98,8 @@ export default function FormUser({id, onClose, isChildren}:Props){
                 <TextField
                     defaultValue={data && data.password}
                     margin="normal"
-                    required
                     fullWidth
-                    id="username"
+                    id="password"
                     type='password'
                     label="Password"
                     name="password"
@@ -121,12 +128,12 @@ export default function FormUser({id, onClose, isChildren}:Props){
                         <MenuItem value="2">User</MenuItem>
                     </Select>
                 </FormControl>
-                <FormControl fullWidth required margin="normal">
+                <FormControl fullWidth margin="normal">
                     <InputLabel id="role-type-label">District</InputLabel>
                     <Select
                         labelId="role-type-label"
                         id="use-select"
-                        defaultValue={data && data.role}
+                        defaultValue={data && data.district_id}
                         onChange={(e)=>handleChangeDistrict(e)}
                         label="District"
                     >
@@ -140,8 +147,8 @@ export default function FormUser({id, onClose, isChildren}:Props){
                             })
                         }
                     </Select>
-                </FormControl>
-                <Button
+                    </FormControl>
+                    <Button
                     color="primary"
                     type="submit"
                     fullWidth
