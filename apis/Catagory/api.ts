@@ -162,16 +162,8 @@ export function getCategoryList(token?: string){
     }
 }
 export function getCategoryListSub(parent_id: number){
-    if(parent_id === 0){
-        return {
-            data: null,
-            error: false,
-            isLoading: false,
-        }
-    }
-
     const { data, error, isLoading} = useSWR(
-        baseUrl + `/category/lis/${parent_id}/sub`,
+        baseUrl + `/category/list/${parent_id}/sub`,
         (url) => fetcherToken(url))
     return {
         data: data?.data,

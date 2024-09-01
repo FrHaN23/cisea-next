@@ -56,6 +56,7 @@ export default function FormPenerimaan({id, onClose}:Props){
     const [category_id, setCategory_id] = useState(0)
 
     const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) =>{
+        console.log(e)
         setValue(e.target.value)
     }
     const handleChangeDistrict = (event: any) => {
@@ -93,23 +94,25 @@ export default function FormPenerimaan({id, onClose}:Props){
             body['district_id'] = session?.user.district_id
         }
         body['category_id'] = category_id
+        const sanitized = parseInt(value.replace(/[^\d]/g, ''), 10);
+        body['value'] = sanitized
         console.log(body)
-        // if(id){
-        //     body['id'] = id
-        //     const res = await updatePenerimaan(body)
-        //     if (res.ok){
-        //         onClose()
-        //         setIsLoding(false)
-        //         return Snackbar("User Updated", res.ok)
-        //     }
-        // }else{
-        //     const res = await createPenerimaan(body)
-        //     if (res.ok){
-        //         onClose()
-        //         setIsLoding(false)
-        //         return Snackbar("User Created", res.ok)
-        //     }
-        // }
+        if(id){
+            body['id'] = id
+            const res = await updatePenerimaan(body)
+            if (res.ok){
+                onClose()
+                setIsLoding(false)
+                return Snackbar("Penerimaan Updated", res.ok)
+            }
+        }else{
+            const res = await createPenerimaan(body)
+            if (res.ok){
+                onClose()
+                setIsLoding(false)
+                return Snackbar("Penerimaan Created", res.ok)
+            }
+        }
         setIsLoding(false)
         return Snackbar("something went wrong", false)
     }
@@ -173,7 +176,7 @@ export default function FormPenerimaan({id, onClose}:Props){
                             labelId="role-type-label"
                             id="use-select"
                             defaultValue={data && data.district_id}
-                            onChange={(e)=>handleChangeDistrict(e)}
+                            onChange={(e)=>handleChangeCategoryParent(e)}
                             label="Category"
                         >
                             {
@@ -188,13 +191,13 @@ export default function FormPenerimaan({id, onClose}:Props){
                         </Select>
                     </FormControl>
                     {
-                        ct_parent && <FormControl fullWidth margin="normal">
+                        ct_parent !== 0 && <FormControl fullWidth margin="normal">
                             <InputLabel id="role-type-label">Category value</InputLabel>
                             <Select
                                 labelId="role-type-label"
                                 id="use-select"
                                 defaultValue={data && data.district_id}
-                                onChange={(e)=>handleChangeDistrict(e)}
+                                onChange={(e)=>handleChangeCategoryValue(e)}
                                 label="Category value"
                             >
                                 {

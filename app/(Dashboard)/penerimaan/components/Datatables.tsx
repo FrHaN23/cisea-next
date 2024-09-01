@@ -45,6 +45,7 @@ export default function DataTables({search}:Props){
     }, [search])
 
     const {data, error, isLoading, total} = getPenerimaans(paginationModel)
+    console.log(data)
     return (
         <>
         <Paper sx={{marginTop:"10px", zIndex:1, flexWrap: "warp"}} >
@@ -128,12 +129,34 @@ function ActionButton({id}:any){
 const columns: GridColDef[] = [
     {field: 'id', headerName: '', align:"center", sortable:false, headerAlign:"center", disableColumnMenu:true, width:170, headerClassName: "header",
     renderCell: ((params:any) => <ActionButton id={params.value} isFinished={params.row.is_finished}/>)},
-    {field: 'username', headerName: 'Username', headerAlign:"left", width:400, headerClassName: "header"},
-    {field: 'nama', headerName: 'Nama', headerAlign:"left", width:400, headerClassName: "header"},
-    {field: 'role', headerName: 'Role', headerAlign:"left", width:200, headerClassName: "header",
-        renderCell: ((params: any) => params.value === 1 ? "Admin" : "User")
+    {field: 'category', headerName: 'Category', headerAlign:"center", width:250, headerClassName: "header",
+        renderCell: ((params: any) =>  params.value.name)
     },
-    {field: 'district', headerName: 'Wilayah', headerAlign:"left", width:400, headerClassName: "header",
-        renderCell: ((params: any) => params.value && params.value.name)
+    {field: 'value', headerName: 'Value', headerAlign:"left", width:300, headerClassName: "header",
+        renderCell: ((params: any) => params.value && "Rp " + params.value)
+    },
+    {field: 'district', headerName: 'Wilayah', headerAlign:"left", width:200, headerClassName: "header",
+        renderCell: ((params: any) => params.value.name)
+    },
+    {field: 'Kota', headerName: 'Kota', headerAlign:"center", width:180, headerClassName: "header",
+        renderCell: ((params: any) => {
+            const per = Number(params.row.category.kota)/100
+            const value = per * params.row.value
+            return "Rp " + value
+        })
+    },
+    {field: 'Provinsi', headerName: 'Provinsi', headerAlign:"center", width:180, headerClassName: "header",
+        renderCell: ((params: any) => {
+            const per = Number(params.row.category.provinsi)/100
+            const value = per * params.row.value
+            return "Rp " + value
+        })
+    },
+    {field: 'Pusat', headerName: 'Pusat', headerAlign:"center", width:180, headerClassName: "header",
+        renderCell: ((params: any) => {
+            const per = Number(params.row.category.pusat)/100
+            const value = per * params.row.value
+            return "Rp " + value
+        })
     },
 ]
