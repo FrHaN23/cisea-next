@@ -29,7 +29,7 @@ export default function CataloguePage(){
                 <DataTables search={Search}/>
             </div>
         </PageContainer>
-        <ModalLayout header='Add New User' isOpen={AddModal} onClose={()=>setAddModal(false)}>
+        <ModalLayout header='Add Penerimaan' isOpen={AddModal} onClose={()=>setAddModal(false)}>
             <FormPenerimaan onClose={()=>setAddModal(false)} />
         </ModalLayout>
         </>

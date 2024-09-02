@@ -1,13 +1,16 @@
 'use client'
 import { getCategoryList, getCategoryListSub } from "@/apis/Catagory/api";
-import { createDistrict, getDistrictById, getDistrictList, updateDistrict } from "@/apis/District/api";
+import { getDistrictList } from "@/apis/District/api";
 import { createPenerimaan, getPenerimaanById, updatePenerimaan } from "@/apis/penerimaan/api";
-import { createUser, getUserById, updateUser } from "@/apis/user/api";
 import BackdropLoading from "@/app/(Dashboard)/components/loading/BackdropLoadng";
 import Snackbar from "@/app/(Dashboard)/utilities/Snackbar/Snakbar";
-import {Box, Button, FormControl, InputLabel, LinearProgress, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import {Box, Button, FilledTextFieldProps, FormControl, InputLabel, LinearProgress, MenuItem, OutlinedTextFieldProps, Select, Stack, StandardTextFieldProps, TextField, TextFieldVariants } from "@mui/material";
+import { Dayjs } from "dayjs";
 import { useSession } from "next-auth/react";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, JSX, SetStateAction, useEffect, useState } from "react";
 import { NumericFormat, NumericFormatProps } from "react-number-format";
 
 type Props = {
@@ -54,6 +57,7 @@ export default function FormPenerimaan({id, onClose}:Props){
     const [district, setDistrict] = useState(0)
     const [ct_parent, setCt_parent] = useState(0)
     const [category_id, setCategory_id] = useState(0)
+    const [date, setDate] = useState<Dayjs | null>(null)
 
     const handleChangeValue = (e: React.ChangeEvent<HTMLInputElement>) =>{
         setValue(e.target.value)
@@ -97,7 +101,7 @@ export default function FormPenerimaan({id, onClose}:Props){
         body['category_id'] = category_id
         const sanitized = parseInt(value.replace(/[^\d]/g, ''), 10);
         body['value'] = sanitized
-        console.log(body)
+        body['date'] = date?.toISOString()
         if(id){
             body['id'] = id
             const res = await updatePenerimaan(body)
@@ -131,30 +135,47 @@ export default function FormPenerimaan({id, onClose}:Props){
     return(
         <>
             <Box component={'form'} onSubmit={handlePost}>
-                {
-                    session?.user.role === 1 &&
-                    <FormControl fullWidth margin="normal">
-                        <InputLabel id="role-type-label">District</InputLabel>
-                        <Select
-                            labelId="role-type-label"
-                            id="use-select"
-                            defaultValue={data && data.district_id}
-                            onChange={(e)=>handleChangeDistrict(e)}
-                            label="District"
-                        >
-                            {
-                                districtList.data && 
-                                !districtList.isLoading && 
-                                districtList.data.map((v:any)=>{
-                                    return (
-                                        <MenuItem id={v.id} value={v.id}>{v.name}</MenuItem>
-                                    )
-                                })
-                            }
-                        </Select>
-                    </FormControl>
-                }
+                <Stack direction={'row'} >
 
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                            sx={{
+                                marginTop: '15px',
+                                marginRight: '8px'
+                            }}
+                            value={date}
+                            label={'Date'} 
+                            views={['month', 'year']}
+                            onChange={(newValue: SetStateAction<Dayjs | null>) => {
+                                if(!newValue) return
+                                setDate(newValue)
+                            }}
+                            />
+                    </LocalizationProvider>
+                    {
+                        session?.user.role === 1 &&
+                        <FormControl fullWidth margin="normal">
+                            <InputLabel id="role-type-label">District</InputLabel>
+                            <Select
+                                labelId="role-type-label"
+                                id="use-select"
+                                defaultValue={data && data.district_id}
+                                onChange={(e)=>handleChangeDistrict(e)}
+                                label="District"
+                            >
+                                {
+                                    districtList.data && 
+                                    !districtList.isLoading && 
+                                    districtList.data.map((v:any)=>{
+                                        return (
+                                            <MenuItem id={v.id} value={v.id}>{v.name}</MenuItem>
+                                        )
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+                    }
+                </Stack>
                 <TextField
                     defaultValue={data && data.value}
                     onChange={handleChangeValue}

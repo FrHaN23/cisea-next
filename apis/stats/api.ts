@@ -2,10 +2,13 @@
 import { baseUrl, fetcherToken } from "@/const/const"
 import useSWR from "swr"
 
-export function getTicketStatus(token?: string){
+export function getPenerimaanStat(year: number){
+    const queryParams = new URLSearchParams({
+        year: year.toString(),
+    })
     const { data, error, isLoading} = useSWR(
-        [baseUrl + `/stats/ticket/status`],
-        ([url]) => fetcherToken(url))
+        baseUrl + `/penerimaan/stats?`+ queryParams,
+        (url) => fetcherToken(url))
     return {
         data: data?.data,
         error,

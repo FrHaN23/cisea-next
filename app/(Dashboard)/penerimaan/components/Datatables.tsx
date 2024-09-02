@@ -1,21 +1,17 @@
-import { Box, Grid, IconButton, Paper, Stack, Tooltip, useMediaQuery, useTheme } from '@mui/material';
+import { Box, IconButton, Paper, Stack, Tooltip } from '@mui/material';
 import { DataGrid, GridColDef} from '@mui/x-data-grid';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useEffect, useState } from 'react';
 import DeleteIcon from '@mui/icons-material/DeleteForeverRounded'
 import { noData, Pagination } from '@/const/const';
-import Link from 'next/link';
 import BackdropLoading from '@/app/(Dashboard)/components/loading/BackdropLoadng';
 import DialogLayout from '@/app/(Dashboard)/components/shared/Dialog';
-import { deleteCategoryById, getCategories } from '@/apis/Catagory/api';
+import { deleteCategoryById } from '@/apis/Catagory/api';
 import Snackbar from '@/app/(Dashboard)/utilities/Snackbar/Snakbar';
-import { getDistricts } from '@/apis/District/api';
 import { Edit } from '@mui/icons-material';
 import ModalLayout from '@/app/(Dashboard)/components/shared/Modal';
-import FormMasterDistrict from './formPenerimaan';
 import FormUser from './formPenerimaan';
-import { getUsers } from '@/apis/user/api';
 import { getPenerimaans } from '@/apis/penerimaan/api';
+import dayjs from 'dayjs';
 
 
 type Props = {
@@ -128,6 +124,9 @@ function ActionButton({id}:any){
 const columns: GridColDef[] = [
     {field: 'id', headerName: '', align:"center", sortable:false, headerAlign:"center", disableColumnMenu:true, width:170, headerClassName: "header",
     renderCell: ((params:any) => <ActionButton id={params.value} isFinished={params.row.is_finished}/>)},
+    {field: 'date', headerName: 'Date', headerAlign:"center", width:180, headerClassName: "header",
+        renderCell: ((params: any) =>  params.value && dayjs(params.value).format('YYYY, MMMM'))
+    },
     {field: 'category', headerName: 'Category', headerAlign:"center", width:250, headerClassName: "header",
         renderCell: ((params: any) =>  params.value.name)
     },
