@@ -80,3 +80,25 @@ export async function updatePenerimaan(body: any){
     }
     return res
 }
+
+export async function exportPenerimaan(){
+    const auth = await Auther()
+    const res = await fetch(baseUrl + `/penerimaan/export`,
+        {
+            method: "GET",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': auth,
+            }
+        }
+    )
+    if (!res.ok) return res
+    const blob: Blob = await res.blob()
+    const objectUrl = URL.createObjectURL(blob)
+    const link: HTMLAnchorElement = document.createElement('a')
+    link.href = objectUrl
+    link.download = Date.now().toString()
+    link.click()
+    URL.revokeObjectURL(objectUrl)
+    return res
+}
