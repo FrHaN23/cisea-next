@@ -136,7 +136,6 @@ export default function FormPenerimaan({id, onClose}:Props){
         <>
             <Box component={'form'} onSubmit={handlePost}>
                 <Stack direction={'row'} >
-
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             sx={{

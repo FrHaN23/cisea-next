@@ -1,8 +1,7 @@
-'use client'
 import React, { useEffect } from 'react';
-import * as am5 from "@amcharts/amcharts5";
-import * as am5xy from "@amcharts/amcharts5/xy";
-import am5themes_Animated from "@amcharts/amcharts5/themes/Animated";
+import * as am4core from '@amcharts/amcharts4/core';
+import * as am4charts from '@amcharts/amcharts4/charts';
+import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 
 interface DataItem {
   id: number;
@@ -41,100 +40,111 @@ interface DataItem {
     kota: number;
     provinsi: number;
     pusat: number;
-    parent_id: number | null;
+    parent_id: number;
   };
 }
 
-interface CategoryChartProps {
+interface ChartData {
+  month: string;
+  [key: string]: number | string;
+}
+
+interface AmChartComponentProps {
   data: DataItem[];
 }
 
-const CategoryChart: React.FC<CategoryChartProps> = ({ data }) => {
+const AmChartComponent: React.FC<AmChartComponentProps> = ({ data }) => {
   useEffect(() => {
-    let root = am5.Root.new("chartdiv");
+    // Themes begin
+    am4core.useTheme(am4themes_animated);
+    // Themes end
 
-    root.setThemes([am5themes_Animated.new(root)]);
+    // Create chart instance
+    const chart = am4core.create('chartdiv', am4charts.XYChart);
 
-    let chart = root.container.children.push(
-      am5xy.XYChart.new(root, {
-        panX: true,
-        panY: true,
-        wheelX: "panX",
-        wheelY: "zoomX",
-        pinchZoomX: true,
-      })
-    );
+    // Process data
+    const processedData = data.reduce<{ [key: string]: { [key: string]: number } }>((acc, item) => {
+      const date = new Date(item.date);
+      const month = date.toISOString().substring(0, 7); // Extract YYYY-MM
 
-    let xAxis = chart.xAxes.push(
-      am5xy.DateAxis.new(root, {
-        baseInterval: { timeUnit: "month", count: 1 },
-        renderer: am5xy.AxisRendererX.new(root, {}),
-      })
-    );
-
-    let yAxis = chart.yAxes.push(
-      am5xy.ValueAxis.new(root, {
-        renderer: am5xy.AxisRendererY.new(root,{}),
-      })
-    );
-
-    let aggregatedData: { [key: string]: { [key: string]: number } } = {};
-
-    data.forEach((item) => {
-      const month = item.date.substring(0, 7); // Get YYYY-MM format
-      const category = item.category.name;
-
-      if (!aggregatedData[month]) {
-        aggregatedData[month] = {};
+      const categoryName = item.category.name;
+      const value = parseInt(item.value, 10);
+  
+      if (!acc[month]) {
+        acc[month] = {};
       }
 
-      if (!aggregatedData[month][category]) {
-        aggregatedData[month][category] = 0;
+      if (!acc[month][categoryName]) {
+        acc[month][categoryName] = 0;
       }
 
-      aggregatedData[month][category] += parseFloat(item.value);
+      acc[month][categoryName] += value;
+
+      return acc;
+    }, {});
+
+
+    const chartData: ChartData[] = Object.keys(processedData).map(month => {
+      const entry: ChartData = { month };
+      Object.keys(processedData[month]).forEach(categoryName => {
+        entry[categoryName] = processedData[month][categoryName];
+      });
+      return entry;
     });
 
-    let chartData: { date: Date; [key: string]: number | Date }[] = [];
-
-    for (let month in aggregatedData) {
-      let dataItem: { date: Date; [key: string]: number | Date } = { date: new Date(month + "-01") };
-
-      for (let category in aggregatedData[month]) {
-        dataItem[category] = aggregatedData[month][category];
+    // Format month to display only the month name
+    const formatMonth = (date: string) => {
+      try {
+        const formated = new Date(date);
+        if (isNaN(formated.getTime())) {
+          throw new Error('Invalid date');
+        }
+        return new Intl.DateTimeFormat('en-US', { month: 'long' }).format(formated);
+      } catch (e) {
+        console.error('Date formatting error:', e);
+        return date; // Return the raw month if formatting fails
       }
+    };
 
-      chartData.push(dataItem);
-    }
+    // Add data to chart
+    chart.data = chartData;
 
-    for (let category in aggregatedData[Object.keys(aggregatedData)[0]]) {
-      let series = chart.series.push(
-        am5xy.LineSeries.new(root, {
-          name: category,
-          xAxis: xAxis,
-          yAxis: yAxis,
-          valueYField: category,
-          valueXField: "date",
-          tooltip: am5.Tooltip.new(root, {
-            labelText: "{name}: {valueY}",
-          }),
-        })
-      );
+    // Create axes
+    const categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+    categoryAxis.dataFields.category = 'month';
+    categoryAxis.title.text = 'Month';
+    categoryAxis.renderer.labels.template.adapter.add('text', (text, target) => {
+      return formatMonth(text as string);
+    });
+    categoryAxis.renderer.labels.template.rotation = 45; // Rotate labels if needed
+    categoryAxis.renderer.labels.template.truncate = false; // Allow labels to not be truncated
 
-      series.data.setAll(chartData);
-    }
+    const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    valueAxis.title.text = 'Value';
 
-    let legend = chart.children.push(am5.Legend.new(root, {}));
-    legend.data.setAll(chart.series.values);
+    // Create series for each category
+    const categories = Array.from(new Set(chartData.flatMap(data => Object.keys(data).filter(key => key !== 'month'))));
 
-    chart.set("cursor", am5xy.XYCursor.new(root, {}));
+    categories.forEach(category => {
+      const series = chart.series.push(new am4charts.ColumnSeries());
+      series.dataFields.valueY = category;
+      series.dataFields.categoryX = 'month';
+      series.name = category;
+      series.tooltipText = '{name}: [bold]{valueY}[/]';
+    });
+
+    // Add legend
+    chart.legend = new am4charts.Legend();
+
+    // Add cursor
+    chart.cursor = new am4charts.XYCursor();
 
     return () => {
-      root.dispose();
+      chart.dispose();
     };
   }, [data]);
 
-  return <div id="chartdiv" style={{ width: "1500px", height: "500px" }}></div>;
+  return <div id="chartdiv" style={{ width: '1500px', height: '500px' }} />;
 };
 
-export default CategoryChart;
+export default AmChartComponent;
